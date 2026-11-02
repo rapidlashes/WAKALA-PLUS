@@ -1,0 +1,20 @@
+COMPARING OUR INTITAL STATISTICS AGAINST NUMPY STATISTICS:
+==============================================================
+highest value : match
+lowest value : match
+count : match
+mean : match
+median : match
+mode : match
+variance : mismatch
+standard deviation : mismatch
+lower fence : mismatch
+first quartile : mismatch
+upper fence : mismatch
+third quartile : mismatch
+interquartile range : mismatch
+outliers : mismatch
+count of outliers : match
+
+The mismathes in the variance and standard deviation are justified.
+We computed for Sampe Variance in our Statistics, while numpy by default used Population Variance
