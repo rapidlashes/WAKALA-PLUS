@@ -88,10 +88,28 @@ This part has several methods:
 3.  `.summary_exclusive_outliers` - It returns a dictionary of the same order of statistics as the first one except it uses the list from function 2.
     **NOTE:**, the second statistics has 0 values for outliers. Our data appears nearly perfect with its values evenly distributed.
 4. `.report()` - Returns a report from the above methods;
-5.                                                        - A list of our raw values
-6.                                                        - A list of our cleaned values
-7.                                                        - A list of the rejected values(and their explanation on why they were rejected) 
-8.                                                        - Initial summary of our data
-9.                                                        - The summary of our data excluding the outliers
-10.                                                        - The list of our data excluding outliers
-11.                                                             
+  - A list of our raw values
+  - A list of our cleaned values
+  - A list of the rejected values(and their explanation on why they were rejected) 
+  - Initial summary of our clean data
+  - The summary of our data excluding the outliers
+  - The list of our data excluding outliers
+                                                                
+5. `save_report` - Saves the data from our `.report()` which is in from of a list, into a `.txt` file.
+
+##### Step 6: Verification of the Statistics
+`compare_with_numpy()` recalculates all the statistics parameters above using numpy, compares the results with the values from the above calculated stratistics  and  returns a string dictionary , dict[str, str], in this format; `{count : match, mean : match, variance : mismatch,.....}`. The `match` means the values produced by numpy are the same or close to those generated above mathematically.
+We also had to import the `math` module to implement this function.
+```python
+import math
+```
+`save_numpy_report(filepath)` - Finally we saved this comparison dictionaryinto another `.txt` file.
+
+#### Dependencies
+```python
+import statistics 
+import csv
+import math
+from pathlib import Path
+```
+
