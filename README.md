@@ -98,12 +98,12 @@ This part has several methods:
 5. `save_report` - Saves the data from our `.report()` which is in from of a list, into a `.txt` file.
 
 ##### Step 6: Verification of the Statistics
-`compare_with_numpy()` recalculates all the statistics parameters above using numpy, compares the results with the values from the above calculated stratistics  and  returns a string dictionary , dict[str, str], in this format; `{count : match, mean : match, variance : mismatch,.....}`. The `match` means the values produced by numpy are the same or close to those generated above mathematically.
+`compare_with_numpy()` recalculates all the statistics parameters above using numpy, compares the results with the values from the above calculated statistics  and  returns a string dictionary , dict[str, str], in this format; `{count : match, mean : match, variance : mismatch,.....}`. The `match` means the values produced by numpy are the same or close to those generated above mathematically.
 We also had to import the `math` module to implement this function.
 ```python
 import math
 ```
-`save_numpy_report(filepath)` - Finally we saved this comparison dictionaryinto another `.txt` file.
+`save_numpy_report(filepath)` -  Saved this comparison dictionary into another `.txt` file.
 
 #### Dependencies
 ```python
