@@ -1,0 +1,18 @@
+COMPARING OUR INTITAL STATISTICS AGAINST NUMPY STATISTICS:
+==============================================================
+highest value : match
+lowest value : match
+count : match
+mean : match
+median : match
+mode : match
+variance : match
+standard deviation : match
+lower fence : mismatch
+first quartile : mismatch
+upper fence : mismatch
+third quartile : mismatch
+interquartile range : mismatch
+outliers : mismatch
+count of outliers : match
+

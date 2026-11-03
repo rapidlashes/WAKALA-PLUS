@@ -1,0 +1,55 @@
+WAKALA PLUS - DAILY DEPOSIT STATISTICS
+==============================================================
+Valid Values: 35 values
+[14582.97, 19708.28, 21684.0, 16857.73, 14247.27, 20029.64, 22014.19, 14362.83, 20758.97, 20017.07, 21643.87, 18174.3, 17622.44, 26725.69, 17575.83, 15988.21, 96500.0, 18805.47, 18965.0, 17396.43, 19373.89, 20715.67, 22009.77, 12772.7, 20745.52, 13956.97, 1200.0, 13783.85, 18506.72, 16008.59, 88400.0, 29060.99, 18344.46, 21195.44, 14265.36]
+
+Rejected values:5 values
+[(7, ''), (10, '-'), (14, 'n/a'), (25, '12,40O'), (29, '')]
+
+ '' - blank value
+ (-) - an invalid string character 
+ 'n/a' - a value is missing
+ '12,40O' - a letter at the end of the float
+ '' - another blank value
+
+STATISCTICAL SUMMARY OF THE CLEANED DATA:
+highest value : 96500.0
+lowest value : 1200.0
+count : 35
+mean : 22400.00342857142
+median : 18805.47
+mode : []
+variance : 328019873.3593996
+standard deviation : 18111.31892931599
+lower fence : 8177.365
+first quartile : 15988.21
+upper fence : 29006.284999999996
+third quartile : 21195.44
+interquartile range : 5207.23
+outliers : [1200.0, 29060.99, 88400.0, 96500.0]
+count of outliers : 4
+
+LIST OF CLEANED DATA EXCLUDING OUTLIERS:
+[14582.97, 19708.28, 21684.0, 16857.73, 14247.27, 20029.64, 22014.19, 14362.83, 20758.97, 20017.07, 21643.87, 18174.3, 17622.44, 26725.69, 17575.83, 15988.21, 18805.47, 18965.0, 17396.43, 19373.89, 20715.67, 22009.77, 12772.7, 20745.52, 13956.97, 13783.85, 18506.72, 16008.59, 18344.46, 21195.44, 14265.36]
+
+THE REMOVED OUTLIERS:
+[96500.0, 1200.0, 88400.0, 29060.99]
+<__main__.StatisticsAnalyzer object at 0x0000015A734FBE10>
+
+STATISTICAL SUMMARY OF CLEANED DATA EXCLUDING OUTLIERS:
+highest value : 96500.0
+lowest value : 1200.0
+count : 35
+mean : 22400.00342857142
+median : 18805.47
+mode : []
+variance : 328019873.3593996
+standard deviation : 18111.31892931599
+lower fence : 8177.365
+first quartile : 15988.21
+upper fence : 29006.284999999996
+third quartile : 21195.44
+interquartile range : 5207.23
+outliers : [1200.0, 29060.99, 88400.0, 96500.0]
+count of outliers : 4
+
