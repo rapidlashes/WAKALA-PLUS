@@ -106,5 +106,18 @@ import math
 ```
 `save_numpy_report(filepath)` -  Saved this comparison dictionary into another `.txt` file.
 
+#### WORTH NOTING...
+All the executable code is put inside the `if __name__ == "__main__":` guard.
+Why are we doing this....
+Consider a situation where you are running a python file directly
+```powershell
+python starter.py
+```
+python sees `if __name__ == '__main__'` asuumes the condition is `True` since you are running it directly and executes the codes beneath it. An alternative situation is you are importing the class from starter.py to another .py file 
+```python
+from starter import StatisticAnalyzer
+```
+everything loads including the class definitions and functions but the code inside the guard doesnt execute, so one can reuse the classes automatically without loading the csv's and generating the reports.
+1. 
 
 
