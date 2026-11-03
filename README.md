@@ -15,61 +15,61 @@ NumPy is permitted only afterwards, to verify that your numbers agree.
 5. Verify your results against NumPy and explain any differences
 6. Write unit tests that pin down edge cases
 
+#### Dependencies
+```python
+import statistics 
+import csv
+import math
+from pathlib import Path
+```
+We use the module `Path`  to handle directories, instead of hard coding our local directory into the code. That way incase somebody else runs the code from their machine, they can just define their own directory.
+The `csv` module is used to read our csv file, extracting only the data we need from the file rather than the whole file.
+
 #### STEPS I APROACHED
 ##### Step 1 - missing aand invalid values
-`load_column(path, column)` reads the CSV and  returns two things: a list of (row_number, raw_values) for everything there is. 
+`load_column(path, column)` reads the CSV and  returns two lists: the clean values and rejected values.
 We used enumerate since when reading our csv the values column started from row no. 2 in our csv file.
 ```python
 def load_column(path: Path, column: str) -> tuple[list[float], list[tuple[int, str]]]:
-    raw_data = []
+    clean_data = []
+    rejects = []
     with open(path, newline="") as file:
         reader = csv.DictReader(file)
         if column not in reader.fieldnames:
             raise ValueError(f"{column} not found in {path}!")
         for row_number, row in enumerate(reader, start=2):
             value = row[column]
-            raw_data.append(value)
+            try:
+                number = float(value.strip())
+                clean_data.append(number)
+            except (ValueError, AttributeError):
+                rejects.append((row_number, value))
 
-    return raw_data
+    return clean_data, rejects
 
 ```
-After reading the file we returned a list of raw values.
-
 
 **My rule:** a value is accepted only if I can be sure what number it means. That means plain digits (20715.67), or digits with correctly placed thousands commas (20,715.67), and not negative.
 Nothing is guessed or repaired. Each rejection is printed in the `report.txt` file with its reason.
-```python
-def clean(dirty_data: list):
-    clean_data = []
-    rejects = []
-    for x in dirty_data:
-        x = x.strip()
-        try:
-            number = float(x)
-            clean_data.append(number)
-        except (ValueError, AttributeError):
-            rejects.append(x)
 
-    return clean_data, rejects
-```
-This step returns two lists after reading the data, a list of clean values and one for the rejected values.
-**NOTE:** One of the values was `12,40O` .This is probably a typo for `12400` but I rejected it anyway.
+**NOTE:** One of the values rejected was `12,40O` .This is probably a typo for `12400` but I rejected it anyway.
 This data is used to spot errors and fraud, so I would rather list the row and let a person check the agent's records than quietly invent a figure.
 
 ##### Step 2: Mean, mode, median(clean values)
 1. **Mean:** add everything up with a loop, divide by how many values there are.
 2. **Median:** sort the values. With an odd count, take the middle one. With an even count, average the two middle ones.
-3. **Mode:** Count how often each value appears and return a dictionary in the format {'value':'count'} , count is how many times the value is repeated across the list.
-4. If each value appears once , return an empty dictionary, or else a dictionary in the above mentioned format  from the highest count.
+3. **Mode:** Count how often each value appears and return a list
+4. If each value appears once , return an empty list since there is no highest count but if there is a highest count , return a list of that value specifically.
 
 ##### Step 3:  Variance , Standard Deviation
 For `variance` I first find the mean, then add up each value's squared distance from it, then divide.
 The `standard deviation` is the square root of the variance.
+Our function says by default the program calculates for the sample variance (n-1), but someone else running this code on a different data set might decide to check the boolean condition for the sample to be `False`, and the code will automatically calculate Population variance.
 
-**Sample variance** : divide by (n-1)
+** Why we used Sample variance??** 
 These 35 days are a slice of something that keeps going: that is the reason why we settled for sample variance.
 Agents deposit money every day. What the risk team wants to know is how much deposits normally vary, not just how much these particular 35 days varied.
-Spread measured on a slice tends to come out slightly too small, and dividing by n − 1 corrects for that. On this data the difference is small (18,111 vs 17,851, about 1.5%), 
+ On this data the difference between the 2 variance methods is small (18,111 vs 17,851, about 1.5%), 
 so the choice  of what Variance method to use matters less than the habit of picking the right one. 
 The Population Variance (n) would be correct only if these 35 days were all the days anyone cared about, but that's not the case.
 
@@ -83,33 +83,28 @@ Now the get `Q1` we found the median of the first list, while `Q3` the second li
 
 ##### Step 5: The StatisticsAnalyzer class
 This part has several methods:
-1. `.summary()` - This method returns a dictionary with each statistic against its value.eg `{count:35, mean:22400,...}` for all the statistics we had done earlieron our clean data.
-2.  `.without_outliers()` - It returns a list of the cleaned values we have been working on excluding the outliers.
-3.  `.summary_exclusive_outliers` - It returns a dictionary of the same order of statistics as the first one except it uses the list from function 2.
+1. `.summary()` - This method returns a dictionary with each statistic against its value.eg `{count:35, mean:22400,...}` for all the statistics we had done earlier(global values) on our clean data.
+2.  `.without_outliers()` - It gives back a list `kept` of the values excluding the outliers but instead of returning the list, It returns an object defined from the class StatisticsAnalyzer. Inside the object is now the list `kept` passed as a parameter.
+3.  `.summary_exclusive_outliers` - It returns a dictionary of the same order of statistics as the first one except it uses the `kept` list from method 2
     **NOTE:**, the second statistics has 0 values for outliers. Our data appears nearly perfect with its values evenly distributed.
 4. `.report()` - Returns a report from the above methods;
   - A list of our raw values
   - A list of our cleaned values
-  - A list of the rejected values(and their explanation on why they were rejected) 
+  - A list of the rejected values(and an explanation justifying their rejections) 
   - Initial summary of our clean data
-  - The summary of our data excluding the outliers
-  - The list of our data excluding outliers
+  - The summary of  excluding outliers data
+  - The list of excluding outliers data
+  - A list of the excluded outliers themselves
                                                                 
-5. `save_report` - Saves the data from our `.report()` which is in from of a list, into a `.txt` file.
-
+5. `save_report` - Saves the data from our `.report()` which is in form of a list, into a `.txt` file.
+We also used a classmethod for loading our csv data in our class.
 ##### Step 6: Verification of the Statistics
-`compare_with_numpy()` recalculates all the statistics parameters above using numpy, compares the results with the values from the above calculated statistics  and  returns a string dictionary , dict[str, str], in this format; `{count : match, mean : match, variance : mismatch,.....}`. The `match` means the values produced by numpy are the same or close to those generated above mathematically.
+`compare_with_numpy()` recalculates all the statistics parameters above using numpy, compares the results with the values from our initial summary and  returns a dictionary , dict[str, str], in this format; `{count : match, mean : match, variance : mismatch,.....}`. The `match` means the values produced by numpy are the same or close to those of the initial summary.
 We also had to import the `math` module to implement this function.
 ```python
 import math
 ```
 `save_numpy_report(filepath)` -  Saved this comparison dictionary into another `.txt` file.
 
-#### Dependencies
-```python
-import statistics 
-import csv
-import math
-from pathlib import Path
-```
+
 
